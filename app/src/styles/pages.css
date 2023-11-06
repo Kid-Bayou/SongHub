@@ -1,0 +1,67 @@
+.site-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .main {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }  
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* ~~~~~~~~~~~~~~~~~~~ HEADER ~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.header {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 50px;
+  margin-left: 50px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo {
+  height: 55px;
+}
+
+.header a {
+    text-decoration: none;
+    color: black;
+}
+
+.header a:hover {
+    color: gray;
+}
+
+.logo-name {
+  font-size: 1.4rem;
+}
+
+.nav-text {
+  font-size: 1.1rem;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* ~~~~~~~~~~~~~~~~~~~ FOOTER ~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.footer {
+  height: 100px;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.copyright-container {
+  color: white;
+}
