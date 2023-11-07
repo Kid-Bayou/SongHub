@@ -1,9 +1,11 @@
+import img from "../assets/home-img.jpg"
 
 function Home() {
   return (
     <>
-      <div className="">
-        <h1 className=""> Hello! </h1>
+      <div className="home-container">
+        <img src={img} className="home-img" />
+        <h1 className="home-text"> Harmony at Your Fingertips: Your Music, Your Way! </h1>
       </div>
     </>
   );
