@@ -15,7 +15,7 @@
 /* ~~~~~~~~~~~~~~~~~~~ HEADER ~~~~~~~~~~~~~~~~~~~~~~~ */
 
 .header {
-  height: 120px;
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -43,7 +43,12 @@
 }
 
 .logo-name {
-  font-size: 1.4rem;
+  font-size: 1.8rem;
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
 }
 
 .nav-text {
