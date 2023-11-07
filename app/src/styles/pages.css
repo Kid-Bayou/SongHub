@@ -35,15 +35,20 @@
 
 .header a {
     text-decoration: none;
-    color: black;
+    color: #422226;
 }
 
 .header a:hover {
-    color: gray;
+    color: #D1A6AC;
 }
 
 .logo-name {
   font-size: 1.8rem;
+  color: #422226;
+}
+
+.logo-name:hover {
+  color: #D1A6AC;
 }
 
 .nav {
@@ -52,7 +57,7 @@
 }
 
 .nav-text {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -60,7 +65,7 @@
 
 .footer {
   height: 100px;
-  background-color: black;
+  background-color: #422226;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,4 +74,11 @@
 
 .copyright-container {
   color: white;
+}
+
+
+.colors {
+  color: #F6EDEF;
+  color: #D1A6AC;
+  color: #422226
 }
