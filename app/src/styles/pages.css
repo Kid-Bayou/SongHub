@@ -108,6 +108,31 @@
 
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* ~~~~~~~~~~~~~~~~~~~ SONGS ~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.songs-container {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.songs-header {
+  color: #422226;
+}
+
+.songs-nav {
+  display: flex;
+  gap: 30px;
+}
+
+.songs-link {
+  text-decoration: none;
+  color: #422226;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* ~~~~~~~~~~~~~~~~~~~ COLORS ~~~~~~~~~~~~~~~~~~~~~~~ */
 
 

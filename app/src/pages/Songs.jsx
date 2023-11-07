@@ -1,8 +1,8 @@
 
-function Songs () {
+function Songs() {
     return (
         <>
-            <h1>yeah</h1>
+            <h1>Songs</h1>
         </>
     )
 }
