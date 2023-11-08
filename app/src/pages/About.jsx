@@ -1,7 +1,17 @@
+import { css } from "@emotion/react";
+
+const about_container = css`
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
 function About() {
   return (
     <>
-      <div className="about-container">
+      <div css={about_container}>
         <h1>About</h1>
         <p>
           Welcome to SongHub Your Personal Music Hub At SongHub, we put you in

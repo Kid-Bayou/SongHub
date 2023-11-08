@@ -1,11 +1,28 @@
-import img from "../assets/home-img.jpg"
+import { css } from "@emotion/react";
+import img from "../assets/home-img.jpg";
+
+const home_container = css`
+  display: flex;
+  width: 80%;
+`;
+
+const home_img = css`
+  width: 40%;
+`;
+
+const home_text = css`
+  color: #422226;
+`;
 
 function Home() {
   return (
     <>
-      <div className="home-container">
-        <img src={img} className="home-img" />
-        <h1 className="home-text"> Harmony at Your Fingertips: Your Music, Your Way! </h1>
+      <div css={home_container}>
+        <img src={img} css={home_img} />
+        <h1 css={home_text}>
+          {" "}
+          Harmony at Your Fingertips: Your Music, Your Way!{" "}
+        </h1>
       </div>
     </>
   );
