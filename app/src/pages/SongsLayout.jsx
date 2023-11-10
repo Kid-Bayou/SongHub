@@ -27,7 +27,7 @@ const songs_link = css`
 `;
 
 const songs_outlet = css `
-
+margin: 50px;
 `;
 
 function SongsLayout() {

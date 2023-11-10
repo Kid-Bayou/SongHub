@@ -1,32 +1,27 @@
 import { css } from "@emotion/react";
-import { useState } from "react";
-import { storage } from "../config/firebase"
-import { ref, uploadBytes } from "firebase/storage";
-import { v4 } from "uuid";
+
+const button = css `
+ background-color: #422226;
+ color: #F6EDEF;
+ font-size: 1rem;
+ cursor: pointer;
+ border: solid #422226 2px;
+ border-radius: 20px;
+ width: 100px;
+ height: 50px;
+
+ &:hover {
+    background-color: #D1A6AC;
+ }
+`
 
 function Songs() {
 
-  const [songUpload, setSongUpload] = useState(null);
-
-  const uploadSong = () => {
-    if (songUpload == null) return;
-
-    const songRef = ref(storage, `songs/${songUpload.name + v4()}`);
-    uploadBytes(songRef, songUpload).then(() => {
-        alert("Song Uploaded")
-    })
-  };
-
   return (
     <>
-      <h1>Songs</h1>
-      <input
-        type="file"
-        onChange={(event) => {
-          setSongUpload(event.target.files[0]);
-        }}
-      />
-      <button onClick={uploadSong}>Upload Song</button>
+
+      <button css={button}>Add Song</button>
+      
     </>
   );
 }
