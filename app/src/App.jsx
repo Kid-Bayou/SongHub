@@ -7,6 +7,9 @@ import About from "./pages/About";
 import SongsLayout from "./pages/SongsLayout";
 import Songs from "./pages/Songs";
 import Playlists from "./pages/Playlists";
+import AddSong from "./pages/AddSong";
+import DeleteSong from "./pages/DeleteSong";
+import UpdateSong from "./pages/UpdateSong";
 
 import "./App.css";
 
@@ -22,6 +25,9 @@ function App() {
               <Route index element={<Songs />} />
               <Route path="playlists" element={<Playlists />} />
             </Route>
+            <Route path="addsong" element={<AddSong />} />
+            <Route path="deletesong" element={<DeleteSong />} />
+            <Route path="updatesong" element={<UpdateSong />} />
           </Route>
         </Routes>
       </BrowserRouter>

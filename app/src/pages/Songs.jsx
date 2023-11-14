@@ -1,4 +1,5 @@
 import { css } from "@emotion/react";
+import { useNavigate } from "react-router-dom";
 
 import { db, storage } from "../config/firebase";
 import { useEffect, useState } from "react";
@@ -53,6 +54,9 @@ margin: 5px;
 `
 
 function Songs() {
+
+  const navigate = useNavigate();
+
   const [songs, setSongs] = useState([]);
 
   const songsCollectionRef = collection(db, "songs");
@@ -69,6 +73,10 @@ function Songs() {
       console.error(err);
     }
   };
+
+  const navigatePage = async () => {
+    navigate("/addsong")
+  }
 
   useEffect(() => {
     getSongs();
@@ -87,7 +95,7 @@ function Songs() {
         ))}
       </div>
 
-      <button css={button}>Add Song</button>
+      <button onClick={navigatePage} css={button}>Add Song</button>
     </>
   );
 }
