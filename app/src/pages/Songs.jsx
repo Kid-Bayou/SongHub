@@ -24,11 +24,32 @@ const button = css`
 
 const songs_container = css `
 display: flex;
-width
+gap: 10px;
+margin-bottom: 50px;
+flex-wrap: wrap;
 `
 
 const card = css `
+width: 200px;
+height: 250px;
+background-color: #D1A6AC;
+border-radius: 6%;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
 
+`
+
+const img = css `
+width: 150px;
+height: 110px;
+background-size: 100%;
+margin-bottom: 15px;
+`
+
+const card_text = css `
+margin: 5px;
 `
 
 function Songs() {
@@ -58,9 +79,10 @@ function Songs() {
 
       <div css={songs_container}>
         {songs.map((song) => (
-          <div key={song.id}>
-            <h3>{song.name}</h3>
-            <h4>{song.artist}</h4>
+          <div key={song.id} css={card}>
+            <img src={noImage} css={img}/>
+            <h3 css={card_text}>{song.name}</h3>
+            <h4 css={card_text}>{song.artist}</h4>
           </div>
         ))}
       </div>
