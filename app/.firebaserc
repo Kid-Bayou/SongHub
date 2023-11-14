@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "songhub-48b99"
-  }
+    "default": "songhub-48b99",
+    "staging": "songhub-46ca7"
+  },
+  "targets": {},
+  "etags": {}
 }
