@@ -1,17 +1,20 @@
 import { css } from "@emotion/react";
 
-const upd_container = css `
-display: flex;
-flex-direction: column;
-align-items: center
-`
+import { db } from "../config/firebase";
+import { getDocs, collection, doc, updateDoc } from "firebase/firestore";
 
-const upd_form = css `
-display: flex;
-flex-direction: column;
-gap: 5px;
-align-items: center;
-`
+const upd_container = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const upd_form = css`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+`;
 
 const button = css`
   background-color: #422226;
@@ -30,6 +33,11 @@ const button = css`
 `;
 
 function UpdateSong() {
+  const update = async (id) => {
+    const songDoc = doc(db, "songs", id);
+    await updateDoc(songDoc, { Title: updatedTitle, Artist: updatedArtist });
+  };
+
   return (
     <>
       <div css={upd_container}>
