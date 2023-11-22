@@ -1,4 +1,13 @@
 import { css } from "@emotion/react";
+import { useNavigate, useParams } from "react-router-dom"
+
+import { db, storage } from "../config/firebase";
+import {
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
+
+import {ref, uploadBytes} from "firebase/storage"
 
 const del_container = css `
 display: flex;
@@ -28,14 +37,29 @@ justify-content: center;
 `
 
 function DeleteSong() {
+
+  const params = useParams()
+  const navigate = useNavigate()
+
+  
+  const deleteSong = async () => {
+    const songDoc = doc(db, "songs", params.id);
+    await deleteDoc(songDoc);
+    navigate("/songs")
+  };
+
+  const goBack = async () => {
+    navigate("/songs")
+  }
+
   return (
     <>
       <div css={del_container}>
         <h1>Delete Song</h1>
         <p>Are you sure you want to delete this song?</p>
         <div css={button_container}>
-          <button css={button}>Yes</button>
-          <button css={button}>No</button>
+          <button css={button} onClick={deleteSong}>Yes</button>
+          <button css={button} onClick={goBack}>No</button>
         </div>
       </div>
     </>
