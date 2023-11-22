@@ -7,11 +7,13 @@ import { getDocs, collection, doc } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
 
 import noImage from "../assets/noImage.jpg";
+import del from "../assets/delete.png";
+import edit from "../assets/edit.png";
 
 const container = css`
-display: flex;
-flex-direction: column;
-align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const button = css`
@@ -38,8 +40,8 @@ const songs_container = css`
 `;
 
 const card = css`
-  width: 200px;
-  height: 250px;
+  width: 210px;
+  height: 270px;
   background-color: #d1a6ac;
   border-radius: 6%;
   display: flex;
@@ -57,6 +59,18 @@ const img = css`
 
 const card_text = css`
   margin: 5px;
+`;
+
+const card_icons = css`
+  height: 35px;
+  cursor: pointer;
+`;
+
+const card_icons_container = css`
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 15px;
+  width: 100%;
 `;
 
 function Songs() {
@@ -87,6 +101,14 @@ function Songs() {
     getSongs();
   });
 
+  const update = async (id) => {
+    navigate (`/updatesong/${id}`)
+  };
+
+  const delet = async (id) => {
+    navigate (`/deletesong/${id}`)
+  };
+
   return (
     <>
       <div css={container}>
@@ -96,6 +118,10 @@ function Songs() {
               <img src={noImage} css={img} />
               <h3 css={card_text}>{song.title}</h3>
               <h4 css={card_text}>{song.artist}</h4>
+              <div css={card_icons_container}>
+                <img src={edit} css={card_icons} onClick={() => update(song.id)}/>
+                <img src={del} css={card_icons} onClick={() => delet(song.id)}/>
+              </div>
             </div>
           ))}
         </div>

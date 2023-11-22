@@ -26,8 +26,8 @@ function App() {
               <Route path="playlists" element={<Playlists />} />
             </Route>
             <Route path="addsong" element={<AddSong />} />
-            <Route path="deletesong" element={<DeleteSong />} />
-            <Route path="updatesong" element={<UpdateSong />} />
+            <Route path="deletesong/:id" element={<DeleteSong />} />
+            <Route path="updatesong/:id" element={<UpdateSong />} />
           </Route>
         </Routes>
       </BrowserRouter>
