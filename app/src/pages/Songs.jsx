@@ -88,10 +88,17 @@ function Songs() {
         id: doc.id,
       }));
       setSongs(filteredData);
-    } catch {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
+  
+      // Handle the error and provide user feedback
+      if (error.code === 'resource-exhausted') {
+        console.error('Quota exceeded. Consider optimizing your queries or upgrading to a paid plan.');
+      }
     }
   };
+  
+  
 
   const navigatePage = async () => {
     navigate("/addsong");
@@ -99,7 +106,7 @@ function Songs() {
 
   useEffect(() => {
     getSongs();
-  });
+  }, []);
 
   const update = async (id) => {
     navigate (`/updatesong/${id}`)

@@ -1,7 +1,8 @@
 import { css } from "@emotion/react";
-
 import { db } from "../config/firebase";
-import { getDocs, collection, doc, updateDoc } from "firebase/firestore";
+import { getDoc, collection, doc, updateDoc } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const upd_container = css`
   display: flex;
@@ -33,10 +34,25 @@ const button = css`
 `;
 
 function UpdateSong() {
-  const update = async (id) => {
-    const songDoc = doc(db, "songs", id);
-    await updateDoc(songDoc, { Title: updatedTitle, Artist: updatedArtist });
+  const navigate = useNavigate();
+  const params = useParams();
+
+  const [newTitle, setNewTitle] = useState("");
+  const [newArtist, setNewArtist] = useState("");
+
+  const update = async () => {
+    try {
+      const songDoc = doc(db, "songs", params.id);
+      await updateDoc(songDoc, {
+        title: newTitle,
+        artist: newArtist,
+      });
+      navigate("/songs");
+    } catch (error) {
+      console.error("Error updating song:", error);
+    }
   };
+  
 
   return (
     <>
@@ -44,14 +60,22 @@ function UpdateSong() {
         <h1>Update Song</h1>
         <form css={upd_form}>
           <div>
-            <label>Title:</label>
-            <input type="text" />
+            <label>New Title:</label>
+            <input
+              type="text"
+              onChange={(e) => setNewTitle(e.target.value)}
+            />
           </div>
           <div>
-            <label>Artist:</label>
-            <input type="text" />
+            <label>New Artist:</label>
+            <input
+              type="text"
+              onChange={(e) => setNewArtist(e.target.value)}
+            />
           </div>
-          <button css={button}>Update Song</button>
+          <button css={button} onClick={update}>
+            Update Song
+          </button>
         </form>
       </div>
     </>
