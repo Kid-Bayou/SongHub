@@ -1,9 +1,12 @@
 import { css } from "@emotion/react";
 
+import { useNavigate } from "react-router-dom";
+
 import { useState } from "react";
-import { storage } from "../config/firebase";
+import { db, storage } from "../config/firebase";
 import { ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
+import { collection, addDoc, doc } from "firebase/firestore";
 
 const add_container = css`
   display: flex;
@@ -11,8 +14,16 @@ const add_container = css`
   align-items: center;
 `;
 
+// ... (imports remain the same)
+
 function AddSong() {
+  const navigate = useNavigate();
+
   const [songUpload, setSongUpload] = useState(null);
+  const [songTitle, setSongTitle] = useState("");
+  const [artist, setArtist] = useState("");
+
+  const songCollectionRef = collection(db, "songs");
 
   const uploadSong = () => {
     if (songUpload == null) return;
@@ -23,6 +34,18 @@ function AddSong() {
     });
   };
 
+  const onSubmitSong = async () => {
+    try {
+      await addDoc(songCollectionRef, {
+        title: songTitle,
+        artist: artist,
+      });
+      navigate("/songs");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <>
       <div css={add_container}>
@@ -30,11 +53,19 @@ function AddSong() {
         <form>
           <div>
             <label>Title:</label>
-            <input type="text" />
+            <input
+              type="text"
+              value={songTitle}
+              onChange={(event) => setSongTitle(event.target.value)}
+            />
           </div>
           <div>
             <label>Artist:</label>
-            <input type="text" />
+            <input
+              type="text"
+              value={artist}
+              onChange={(event) => setArtist(event.target.value)}
+            />
           </div>
           <div>
             <label>Song:</label>
@@ -46,7 +77,12 @@ function AddSong() {
             />
           </div>
 
-          <button onClick={uploadSong}>Upload Song</button>
+          <button type="button" onClick={uploadSong}>
+            Upload Song
+          </button>
+          <button type="button" onClick={onSubmitSong}>
+            Submit Song
+          </button>
         </form>
       </div>
     </>
