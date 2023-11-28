@@ -1,19 +1,15 @@
 import { css } from "@emotion/react";
-import { db } from "../config/firebase";
-import { getDoc, collection, doc, updateDoc } from "firebase/firestore";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const upd_container = css`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+import { db, storage } from "../config/firebase";
+import { updateDoc, doc } from "firebase/firestore";
 
-const upd_form = css`
+import { ref, uploadBytes } from "firebase/storage";
+
+const update_container = css`
   display: flex;
   flex-direction: column;
-  gap: 5px;
   align-items: center;
 `;
 
@@ -26,57 +22,58 @@ const button = css`
   border-radius: 20px;
   width: 100px;
   height: 50px;
-  margin-top: 20px;
 
   &:hover {
     background-color: #d1a6ac;
   }
 `;
 
+const form = css`
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-direction: column;
+`;
+
 function UpdateSong() {
-  const navigate = useNavigate();
   const params = useParams();
+  const navigate = useNavigate();
 
   const [newTitle, setNewTitle] = useState("");
   const [newArtist, setNewArtist] = useState("");
 
-  const update = async () => {
+  const updat = async () => {
+    console.log("where is you");
     try {
+      console.log("i am working, kind of:");
       const songDoc = doc(db, "songs", params.id);
       await updateDoc(songDoc, {
-        title: newTitle,
-        artist: newArtist,
+      title: newTitle,
+      artist: newArtist,
       });
       navigate("/songs");
     } catch (error) {
       console.error("Error updating song:", error);
     }
   };
-  
 
   return (
     <>
-      <div css={upd_container}>
+      <div css={update_container}>
         <h1>Update Song</h1>
-        <form css={upd_form}>
+        <div css={form}>
           <div>
-            <label>New Title:</label>
-            <input
-              type="text"
-              onChange={(e) => setNewTitle(e.target.value)}
-            />
-          </div>
+            <label>New Title:</label>{" "}
+            <input type="text" onChange={(e) => setNewTitle(e.target.value)} /> {" "}
+          </div>{" "}
           <div>
-            <label>New Artist:</label>
-            <input
-              type="text"
-              onChange={(e) => setNewArtist(e.target.value)}
-            />
+            <label>New Artist:</label>{" "}
+            <input type="text" onChange={(e) => setNewArtist(e.target.value)} />{" "}
           </div>
-          <button css={button} onClick={update}>
+          <button css={button} onClick={updat}>
             Update Song
           </button>
-        </form>
+        </div>
       </div>
     </>
   );
