@@ -1,20 +1,16 @@
 import { css } from "@emotion/react";
-
 import { useNavigate } from "react-router-dom";
-
 import { useState } from "react";
 import { db, storage } from "../config/firebase";
-import { ref, uploadBytes } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
-import { collection, addDoc, doc } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 
 const add_container = css`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
-
-// ... (imports remain the same)
 
 function AddSong() {
   const navigate = useNavigate();
@@ -25,24 +21,39 @@ function AddSong() {
 
   const songCollectionRef = collection(db, "songs");
 
-  const uploadSong = () => {
-    if (songUpload == null) return;
+  const uploadSong = async () => {
+    console.log("here");
+    if (!songUpload) return;
 
-    const songRef = ref(storage, `songs/${songUpload.name + v4()}`);
-    uploadBytes(songRef, songUpload).then(() => {
-      alert("Song Uploaded");
-    });
-  };
+    const songRef = ref(storage, `songs/${songUpload.name}-${v4()}`);
 
-  const onSubmitSong = async () => {
     try {
-      await addDoc(songCollectionRef, {
-        title: songTitle,
-        artist: artist,
-      });
-      navigate("/songs");
-    } catch (err) {
-      console.error(err);
+      const uploadTask = uploadBytes(songRef, songUpload);
+      console.log("here3");
+
+      await uploadTask;
+
+      const downloadURL = await getDownloadURL(songRef);
+      console.log("here4", downloadURL);
+
+      try {
+        const docRef = await addDoc(songCollectionRef, {
+          title: songTitle,
+          artist: artist,
+          file_path: downloadURL, 
+        });
+        console.log("Song Uploaded:", docRef.id);
+        alert("Song Uploaded!");
+        navigate("/songs");
+
+        setSongTitle("");
+        setArtist("");
+        setSongUpload(null);
+      } catch (err) {
+        console.error("Error adding document: ", err);
+      }
+    } catch (error) {
+      console.error("Error uploading file: ", error);
     }
   };
 
@@ -78,10 +89,7 @@ function AddSong() {
           </div>
 
           <button type="button" onClick={uploadSong}>
-            Upload Song
-          </button>
-          <button type="button" onClick={onSubmitSong}>
-            Submit Song
+            Upload and Submit Song
           </button>
         </form>
       </div>
