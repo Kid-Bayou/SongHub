@@ -16,6 +16,7 @@ function AddSong() {
   const navigate = useNavigate();
 
   const [songUpload, setSongUpload] = useState(null);
+  const [imageUpload, setImageUpload] = useState(null);
   const [songTitle, setSongTitle] = useState("");
   const [artist, setArtist] = useState("");
 
@@ -26,14 +27,18 @@ function AddSong() {
     if (!songUpload) return;
 
     const songRef = ref(storage, `songs/${songUpload.name}-${v4()}`);
+    const imageRef = ref(storage, `images/${imageUpload.name}-${v4()}`);
 
     try {
       const uploadTask = uploadBytes(songRef, songUpload);
+      const uploadTask2 = uploadBytes(imageRef, imageUpload);
       console.log("here3");
 
       await uploadTask;
+      await uploadTask2;
 
       const downloadURL = await getDownloadURL(songRef);
+      const downloadURL2 = await getDownloadURL(imageRef);
       console.log("here4", downloadURL);
 
       try {
@@ -41,6 +46,7 @@ function AddSong() {
           title: songTitle,
           artist: artist,
           file_path: downloadURL, 
+          img_path: downloadURL2, 
         });
         console.log("Song Uploaded:", docRef.id);
         alert("Song Uploaded!");
@@ -87,9 +93,18 @@ function AddSong() {
               }}
             />
           </div>
+          <div>
+            <label>Image:</label>
+            <input
+              type="file"
+              onChange={(event) => {
+                setImageUpload(event.target.files[0]);
+              }}
+            />
+          </div>
 
           <button type="button" onClick={uploadSong}>
-            Upload and Submit Song
+            Upload Song
           </button>
         </form>
       </div>
