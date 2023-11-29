@@ -3,8 +3,9 @@ import img from "../assets/home-img.jpg";
 
 const home_container = css`
   display: flex;
-  width: 80%;
-`;
+  width: 70%;
+  gap: 30px; 
+`
 
 const home_img = css`
   width: 40%;
@@ -12,6 +13,7 @@ const home_img = css`
 
 const home_text = css`
   color: #422226;
+  font-size: 3rem;
 `;
 
 function Home() {
@@ -20,8 +22,7 @@ function Home() {
       <div css={home_container}>
         <img src={img} css={home_img} />
         <h1 css={home_text}>
-          {" "}
-          Harmony at Your Fingertips: Your Music, Your Way!{" "}
+          Harmony at Your Fingertips: Your Music, Your Way!
         </h1>
       </div>
     </>
