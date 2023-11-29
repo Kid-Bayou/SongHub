@@ -14,6 +14,7 @@ const container = css`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 50px;
 `;
 
 const button = css`
@@ -33,7 +34,7 @@ const button = css`
 
 const songs_container = css`
   display: flex;
-  gap: 20px;
+  gap: 25px;
   margin-bottom: 50px;
   flex-wrap: wrap;
   justify-content: center;
@@ -90,15 +91,14 @@ function Songs() {
       setSongs(filteredData);
     } catch (error) {
       console.error(error);
-  
-      // Handle the error and provide user feedback
-      if (error.code === 'resource-exhausted') {
-        console.error('Quota exceeded. Consider optimizing your queries or upgrading to a paid plan.');
+
+      if (error.code === "resource-exhausted") {
+        console.error(
+          "Quota exceeded. Consider optimizing your queries or upgrading to a paid plan."
+        );
       }
     }
   };
-  
-  
 
   const navigatePage = async () => {
     navigate("/addsong");
@@ -109,16 +109,19 @@ function Songs() {
   }, []);
 
   const update = async (id) => {
-    navigate (`/updatesong/${id}`)
+    navigate(`/updatesong/${id}`);
   };
 
   const delet = async (id) => {
-    navigate (`/deletesong/${id}`)
+    navigate(`/deletesong/${id}`);
   };
 
   return (
     <>
       <div css={container}>
+        <button onClick={navigatePage} css={button}>
+          Add Song
+        </button>
         <div css={songs_container}>
           {songs.map((song) => (
             <div key={song.id} css={card}>
@@ -126,16 +129,20 @@ function Songs() {
               <h3 css={card_text}>{song.title}</h3>
               <h4 css={card_text}>{song.artist}</h4>
               <div css={card_icons_container}>
-                <img src={edit} css={card_icons} onClick={() => update(song.id)}/>
-                <img src={del} css={card_icons} onClick={() => delet(song.id)}/>
+                <img
+                  src={edit}
+                  css={card_icons}
+                  onClick={() => update(song.id)}
+                />
+                <img
+                  src={del}
+                  css={card_icons}
+                  onClick={() => delet(song.id)}
+                />
               </div>
             </div>
           ))}
         </div>
-
-        <button onClick={navigatePage} css={button}>
-          Add Song
-        </button>
       </div>
     </>
   );
