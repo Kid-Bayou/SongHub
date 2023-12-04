@@ -12,6 +12,14 @@ const add_container = css`
   align-items: center;
 `;
 
+const add_form = css ``
+const input_container = css ``
+const label = css ``
+const input_box = css ``
+const input_file = css ``
+const button = css ``
+
+
 function AddSong() {
   const navigate = useNavigate();
 
