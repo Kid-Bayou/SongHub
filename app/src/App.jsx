@@ -1,7 +1,11 @@
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import React from "react";
+import songReducer from "./pages/redux/SongSlice"; 
 
 import Layout from "./pages/components/Layout";
-
 import Home from "./pages/Home";
 import About from "./pages/About";
 import SongsLayout from "./pages/SongsLayout";
@@ -13,9 +17,15 @@ import UpdateSong from "./pages/UpdateSong";
 
 import "./App.css";
 
+const store = configureStore({
+  reducer: {
+    song: songReducer,
+  },
+});
+
 function App() {
   return (
-    <>
+    <Provider store={store}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
@@ -31,7 +41,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-    </>
+    </Provider>
   );
 }
 

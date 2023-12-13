@@ -5,6 +5,8 @@ import { db, storage } from "../config/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import { collection, addDoc } from "firebase/firestore";
+import { useDispatch, useSelector } from "react-redux";
+import { setNewTitle, setNewArtist } from "./redux/SongSlice";
 
 const add_container = css`
   display: flex;
@@ -54,11 +56,13 @@ height: 50px;
 
 function AddSong() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [songUpload, setSongUpload] = useState(null);
   const [imageUpload, setImageUpload] = useState(null);
-  const [songTitle, setSongTitle] = useState("");
-  const [artist, setArtist] = useState("");
+
+  const songTitle = useSelector((state) => state.song.title);
+  const artist = useSelector((state) => state.song.artist);
 
   const songCollectionRef = collection(db, "songs");
 
@@ -85,16 +89,18 @@ function AddSong() {
         const docRef = await addDoc(songCollectionRef, {
           title: songTitle,
           artist: artist,
-          file_path: downloadURL, 
-          img_path: downloadURL2, 
+          file_path: downloadURL,
+          img_path: downloadURL2,
         });
         console.log("Song Uploaded:", docRef.id);
         alert("Song Uploaded!");
         navigate("/songs");
-
-        setSongTitle("");
-        setArtist("");
+  
+        // Dispatch actions to reset Redux state
+        dispatch(setNewTitle(""));
+        dispatch(setNewArtist(""));
         setSongUpload(null);
+        setImageUpload(null);
       } catch (err) {
         console.error("Error adding document: ", err);
       }
@@ -114,7 +120,7 @@ function AddSong() {
               css={input_box}
               type="text"
               value={songTitle}
-              onChange={(event) => setSongTitle(event.target.value)}
+              onChange={(event) => dispatch(setNewTitle(event.target.value))}
             />
           </div>
           <div css={input_container}>
@@ -123,7 +129,8 @@ function AddSong() {
               css={input_box}
               type="text"
               value={artist}
-              onChange={(event) => setArtist(event.target.value)}
+              onChange={(event) => dispatch(setNewArtist(event.target.value))}
+
             />
           </div>
           <div css={input_container}>

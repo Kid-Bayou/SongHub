@@ -1,11 +1,14 @@
 import { css } from "@emotion/react";
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import  { useParams } from "react-router-dom"
 
 import { db, storage } from "../config/firebase";
 import { updateDoc, doc } from "firebase/firestore";
 
 import { ref, uploadBytes } from "firebase/storage";
+import { useNavigate } from "react-router-dom";
+
+import { useDispatch, useSelector } from "react-redux";
+import { setNewTitle, setNewArtist } from "./redux/SongSlice"; 
 
 const update_container = css`
   display: flex;
@@ -38,18 +41,17 @@ const form = css`
 function UpdateSong() {
   const params = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [newTitle, setNewTitle] = useState("");
-  const [newArtist, setNewArtist] = useState("");
+  const newTitle = useSelector((state) => state.song.title);
+  const newArtist = useSelector((state) => state.song.artist);
 
   const updat = async () => {
-    console.log("where is you");
     try {
-      console.log("i am working, kind of:");
       const songDoc = doc(db, "songs", params.id);
       await updateDoc(songDoc, {
-      title: newTitle,
-      artist: newArtist,
+        title: newTitle,
+        artist: newArtist,
       });
       navigate("/songs");
     } catch (error) {
@@ -64,11 +66,19 @@ function UpdateSong() {
         <div css={form}>
           <div>
             <label>New Title:</label>{" "}
-            <input type="text" onChange={(e) => setNewTitle(e.target.value)} /> {" "}
+            <input
+              type="text"
+              value={newTitle}
+              onChange={(e) => dispatch(setNewTitle(e.target.value))}
+            />
           </div>{" "}
           <div>
             <label>New Artist:</label>{" "}
-            <input type="text" onChange={(e) => setNewArtist(e.target.value)} />{" "}
+            <input
+              type="text"
+              value={newArtist}
+              onChange={(e) => dispatch(setNewArtist(e.target.value))}
+            />
           </div>
           <button css={button} onClick={updat}>
             Update Song
