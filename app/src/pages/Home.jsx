@@ -4,11 +4,13 @@ import img from "../assets/home-img.jpg";
 const home_container = css`
   display: flex;
   width: 70%;
-  gap: 30px; 
+  gap: 30px;
+  align-items: center; 
 `
 
 const home_img = css`
-  width: 40%;
+  width: 40vw;
+  height: 40vh;
 `;
 
 const home_text = css`

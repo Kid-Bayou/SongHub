@@ -12,12 +12,44 @@ const add_container = css`
   align-items: center;
 `;
 
-const add_form = css ``
-const input_container = css ``
-const label = css ``
-const input_box = css ``
-const input_file = css ``
-const button = css ``
+const add_form = css `
+display: flex;
+flex-direction: column;
+gap: 20px;
+width: 60%;
+`
+const input_container = css `
+display: flex;
+gap: 10px;
+justify-content: space-around;
+`
+const label = css `
+font-size: 1.3rem;
+color: #422226;
+`
+const input_box = css `
+border: solid 1px #422226;
+border-radius: 5px;
+height: 30px;
+`
+const input_file = css `
+
+`
+
+const button = css `
+background-color: #422226;
+color: #f6edef;
+font-size: 1rem;
+cursor: pointer;
+border: solid #422226 2px;
+border-radius: 20px;
+width: 100px;
+height: 50px;
+
+&:hover {
+  background-color: #d1a6ac;
+}
+`
 
 
 function AddSong() {
@@ -75,25 +107,27 @@ function AddSong() {
     <>
       <div css={add_container}>
         <h1>Add Song</h1>
-        <form>
-          <div>
-            <label>Title:</label>
+        <form css={add_form}>
+          <div css={input_container}>
+            <label css={label}>Title:</label>
             <input
+              css={input_box}
               type="text"
               value={songTitle}
               onChange={(event) => setSongTitle(event.target.value)}
             />
           </div>
-          <div>
-            <label>Artist:</label>
+          <div css={input_container}>
+            <label css={label}>Artist:</label>
             <input
+              css={input_box}
               type="text"
               value={artist}
               onChange={(event) => setArtist(event.target.value)}
             />
           </div>
-          <div>
-            <label>Song:</label>
+          <div css={input_container}>
+            <label css={label}>Song:</label>
             <input
               type="file"
               onChange={(event) => {
@@ -101,8 +135,8 @@ function AddSong() {
               }}
             />
           </div>
-          <div>
-            <label>Image:</label>
+          <div css={input_container}>
+            <label css={label}>Image:</label>
             <input
               type="file"
               onChange={(event) => {
@@ -111,7 +145,7 @@ function AddSong() {
             />
           </div>
 
-          <button type="button" onClick={uploadSong}>
+          <button type="button" onClick={uploadSong} css={button}>
             Upload Song
           </button>
         </form>
