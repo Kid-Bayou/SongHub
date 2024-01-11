@@ -1,10 +1,12 @@
 import { css } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
 
-import { db, storage } from "../config/firebase";
-import { useEffect, useState } from "react";
+import { db } from "../config/firebase";
+import { useEffect } from "react";
 import { getDocs, collection, doc } from "firebase/firestore";
-import { ref, uploadBytes } from "firebase/storage";
+
+import { useDispatch, useSelector } from "react-redux";
+import { setSongs } from "./redux/SongsSlice"
 
 import noImage from "../assets/noImage.jpg";
 import del from "../assets/delete.png";
@@ -76,9 +78,8 @@ const card_icons_container = css`
 
 function Songs() {
   const navigate = useNavigate();
-
-  const [songs, setSongs] = useState([]);
-
+  const dispatch = useDispatch();
+  const songs = useSelector((state) => state.songs.list || []);
   const songsCollectionRef = collection(db, "songs");
 
   const getSongs = async () => {
@@ -88,33 +89,34 @@ function Songs() {
         ...doc.data(),
         id: doc.id,
       }));
-      setSongs(filteredData);
+      
+      dispatch(setSongs(filteredData));
     } catch (error) {
       console.error(error);
-
+  
       if (error.code === "resource-exhausted") {
-        console.error(
-          "Quota exceeded. Consider optimizing your queries or upgrading to a paid plan."
-        );
+        console.error("Error.");
       }
     }
   };
 
-  const navigatePage = async () => {
+  const navigatePage = () => {
     navigate("/addsong");
   };
 
   useEffect(() => {
     getSongs();
-  }, []);
+  }, [dispatch]);
 
-  const update = async (id) => {
+  const update = (id) => {
     navigate(`/updatesong/${id}`);
   };
 
-  const delet = async (id) => {
+  const delet = (id) => {
     navigate(`/deletesong/${id}`);
   };
+
+  console.log("Redux State:", songs);
 
   return (
     <>
@@ -125,20 +127,12 @@ function Songs() {
         <div css={songs_container}>
           {songs.map((song) => (
             <div key={song.id} css={card}>
-              <img src={noImage} css={img} />
+              <img src={song.img_path || noImage} css={img} alt={`Cover for ${song.title}`} />
               <h3 css={card_text}>{song.title}</h3>
               <h4 css={card_text}>{song.artist}</h4>
               <div css={card_icons_container}>
-                <img
-                  src={edit}
-                  css={card_icons}
-                  onClick={() => update(song.id)}
-                />
-                <img
-                  src={del}
-                  css={card_icons}
-                  onClick={() => delet(song.id)}
-                />
+                <img src={edit} css={card_icons} onClick={() => update(song.id)} alt="Edit" />
+                <img src={del} css={card_icons} onClick={() => delet(song.id)} alt="Delete" />
               </div>
             </div>
           ))}
