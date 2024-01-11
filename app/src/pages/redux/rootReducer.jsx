@@ -1,4 +1,3 @@
-// rootReducer.js
 import { combineReducers } from 'redux';
 import songReducer from './SongSlice';
 import songsReducer from './SongsSlice'; 

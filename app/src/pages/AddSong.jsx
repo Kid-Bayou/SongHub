@@ -96,7 +96,6 @@ function AddSong() {
         alert("Song Uploaded!");
         navigate("/songs");
   
-        // Dispatch actions to reset Redux state
         dispatch(setNewTitle(""));
         dispatch(setNewArtist(""));
         setSongUpload(null);

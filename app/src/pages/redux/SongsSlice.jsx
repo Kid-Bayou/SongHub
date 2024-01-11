@@ -1,4 +1,3 @@
-// SongsSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 
 const songsSlice = createSlice({
