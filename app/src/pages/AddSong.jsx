@@ -8,51 +8,61 @@ import { collection, addDoc } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { setNewTitle, setNewArtist } from "./redux/SongSlice";
 
+import loading from "../assets/loading.png";
+
 const add_container = css`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-const add_form = css `
-display: flex;
-flex-direction: column;
-gap: 20px;
-width: 60%;
-`
-const input_container = css `
-display: flex;
-gap: 10px;
-justify-content: space-around;
-`
-const label = css `
-font-size: 1.3rem;
-color: #422226;
-`
-const input_box = css `
-border: solid 1px #422226;
-border-radius: 5px;
-height: 30px;
-`
-const input_file = css `
+const add_form = css`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 60%;
+`;
+const input_container = css`
+  display: flex;
+  gap: 10px;
+  justify-content: space-around;
+`;
+const label = css`
+  font-size: 1.3rem;
+  color: #422226;
+`;
+const input_box = css`
+  border: solid 1px #422226;
+  border-radius: 5px;
+  height: 30px;
+`;
+const input_file = css``;
 
-`
+const button = css`
+  background-color: #422226;
+  color: #f6edef;
+  font-size: 1rem;
+  cursor: pointer;
+  border: solid #422226 2px;
+  border-radius: 20px;
+  width: 100px;
+  height: 50px;
 
-const button = css `
-background-color: #422226;
-color: #f6edef;
-font-size: 1rem;
-cursor: pointer;
-border: solid #422226 2px;
-border-radius: 20px;
-width: 100px;
-height: 50px;
+  &:hover {
+    background-color: #d1a6ac;
+  }
+`;
 
-&:hover {
-  background-color: #d1a6ac;
-}
-`
-
+const loading_img = css`
+  position: fixed;
+  top: 30%;
+  left: 40%;
+  width: 350px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
 
 function AddSong() {
   const navigate = useNavigate();
@@ -60,6 +70,7 @@ function AddSong() {
 
   const [songUpload, setSongUpload] = useState(null);
   const [imageUpload, setImageUpload] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const songTitle = useSelector((state) => state.song.title);
   const artist = useSelector((state) => state.song.artist);
@@ -74,6 +85,8 @@ function AddSong() {
     const imageRef = ref(storage, `images/${imageUpload.name}-${v4()}`);
 
     try {
+      setIsLoading(true);
+
       const uploadTask = uploadBytes(songRef, songUpload);
       const uploadTask2 = uploadBytes(imageRef, imageUpload);
       console.log("here3");
@@ -95,7 +108,7 @@ function AddSong() {
         console.log("Song Uploaded:", docRef.id);
         alert("Song Uploaded!");
         navigate("/songs");
-  
+
         dispatch(setNewTitle(""));
         dispatch(setNewArtist(""));
         setSongUpload(null);
@@ -105,6 +118,8 @@ function AddSong() {
       }
     } catch (error) {
       console.error("Error uploading file: ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -129,7 +144,6 @@ function AddSong() {
               type="text"
               value={artist}
               onChange={(event) => dispatch(setNewArtist(event.target.value))}
-
             />
           </div>
           <div css={input_container}>
@@ -151,9 +165,19 @@ function AddSong() {
             />
           </div>
 
-          <button type="button" onClick={uploadSong} css={button}>
+          <button
+            type="button"
+            onClick={uploadSong}
+            css={button}
+            disabled={isLoading}
+          >
             Upload Song
           </button>
+          {isLoading ? (
+            <img src={loading} alt="Loading" css={loading_img} />
+          ) : (
+            ""
+          )}
         </form>
       </div>
     </>
