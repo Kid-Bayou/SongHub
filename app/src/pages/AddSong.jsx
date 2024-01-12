@@ -79,7 +79,10 @@ function AddSong() {
 
   const uploadSong = async () => {
     console.log("here");
-    if (!songUpload) return;
+    if (!songTitle || !artist || !songUpload || !imageUpload) {
+      alert("Please fill in all fields before uploading the song.");
+      return;
+    }
 
     const songRef = ref(storage, `songs/${songUpload.name}-${v4()}`);
     const imageRef = ref(storage, `images/${imageUpload.name}-${v4()}`);

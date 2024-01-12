@@ -1,77 +1,70 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
-import {
-  FETCH_SONGS_REQUEST,
-  ADD_SONG_REQUEST,
-  UPDATE_SONG_REQUEST,
-  DELETE_SONG_REQUEST,
-} from './actionTypes';
-import {
-  fetchSongsSuccess,
-  fetchSongsFailure,
-  addSongSuccess,
-  addSongFailure,
-  updateSongSuccess,
-  updateSongFailure,
-  deleteSongSuccess,
-  deleteSongFailure,
-} from './actions';
+import { takeEvery, put, call } from 'redux-saga/effects';
+import { addSongSuccess, deleteSongSuccess, updateSongSuccess, setSongs } from '../redux/SongsSlice';
+import { uploadBytes, ref, getDownloadURL } from 'firebase/storage';
+import { collection, addDoc, deleteDoc, doc, updateDoc, getDocs } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
-function* fetchSongsSaga() {
+export function* fetchSongsSaga() {
   try {
-    const songsSnapshot = yield call(() => getDocs(collection(db, 'songs')));
-    const songs = songsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    const songsCollectionRef = collection(db, 'songs');
+    const data = yield call(getDocs, songsCollectionRef);
+    const songs = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-    yield put(fetchSongsSuccess(songs));
+    yield put(setSongs(songs));
   } catch (error) {
-    yield put(fetchSongsFailure(error.message));
-  }
-}
-
-function* addSongSaga(action) {
-  try {
-    const { title, artist, duration } = action.payload;
-    const newSongRef = yield call(() => addDoc(collection(db, 'songs'), { title, artist, duration }));
-    const newSong = { id: newSongRef.id, title, artist, duration };
-
-    yield put(addSongSuccess(newSong));
-  } catch (error) {
-    yield put(addSongFailure(error.message));
-  }
-}
-
-function* updateSongSaga(action) {
-  try {
+    console.error('Error fetching songs: ', error);
     
-    const { songId, songData } = action.payload;
-    const songRef = doc(db, 'songs', songId);
-    yield call(() => updateDoc(songRef, songData));
-
-    yield put(updateSongSuccess(songData));
-  } catch (error) {
-
-    yield put(updateSongFailure(error.message));
   }
 }
 
-function* deleteSongSaga(action) {
+export function* addSongSaga(action) {
+  const { songUpload, imageUpload, songTitle, artist } = action.payload;
+
   try {
-   
-    const songId = action.payload;
-    const songRef = doc(db, 'songs', songId);
-    yield call(() => deleteDoc(songRef));
+    const songRef = ref(storage, `songs/${songUpload.name}-${v4()}`);
+    const imageRef = ref(storage, `images/${imageUpload.name}-${v4()}`);
 
-    yield put(deleteSongSuccess(songId));
+    yield call(uploadBytes, songRef, songUpload);
+    yield call(uploadBytes, imageRef, imageUpload);
+
+    const downloadURL = yield call(getDownloadURL, songRef);
+    const downloadURL2 = yield call(getDownloadURL, imageRef);
+
+    const songCollectionRef = collection(db, 'songs');
+    const docRef = yield call(addDoc, songCollectionRef, {
+      title: songTitle,
+      artist: artist,
+      file_path: downloadURL,
+      img_path: downloadURL2,
+    });
+
+    yield put(addSongSuccess({ id: docRef.id, title: songTitle, artist, file_path: downloadURL, img_path: downloadURL2 }));
   } catch (error) {
- 
-    yield put(deleteSongFailure(error.message));
+    console.error('Error uploading file: ', error);
   }
 }
 
+export function* deleteSongSaga(action) {
+  const { id } = action.payload;
 
-export function* watchSongs() {
-  yield takeLatest(FETCH_SONGS_REQUEST, fetchSongsSaga);
-  yield takeLatest(ADD_SONG_REQUEST, addSongSaga);
-  yield takeLatest(UPDATE_SONG_REQUEST, updateSongSaga);
-  yield takeLatest(DELETE_SONG_REQUEST, deleteSongSaga);
+  const songDoc = doc(db, 'songs', id);
+  yield call(deleteDoc, songDoc);
+
+  yield put(deleteSongSuccess(id));
+}
+
+export function* updateSongSaga(action) {
+  const { id, updatedSong } = action.payload;
+
+  const songDoc = doc(db, 'songs', id);
+  yield call(updateDoc, songDoc, updatedSong);
+
+  yield put(updateSongSuccess({ id, ...updatedSong }));
+}
+
+export function* rootSaga() {
+  yield takeEvery(FETCH_SONGS, fetchSongsSaga);
+  yield takeEvery(ADD_SONG, addSongSaga);
+  yield takeEvery(DELETE_SONG, deleteSongSaga);
+  yield takeEvery(UPDATE_SONG, updateSongSaga);
 }
